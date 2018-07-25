@@ -17,7 +17,7 @@ module Xirr
     def xnpv(rate)
       cf.inject(0) do |sum, t|
         periods_from_start = (t.date - cf.min_date) / cf.period
-        sum += t.amount / ((1 + rate)**periods_from_start)
+        sum += t.amount / ((1 + rate.to_f)**periods_from_start)
       end
     end
   end
