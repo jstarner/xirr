@@ -36,11 +36,7 @@ module Xirr
       # @param x [BigDecimal]
       def values(x)
         value = @transactions.send(@function, BigDecimal.new(x[0].to_s, Xirr::PRECISION))
-        value_direction = (value.real <=>0)
-        value_direction = (value.imaginary <=> 0) if value_direction == 0
-
-        [ BigDecimal.new((value.magnitude * value_direction).to_s, Xirr::PRECISION)]
-#         [BigDecimal.new(value.to_s, Xirr::PRECISION)]
+        [BigDecimal.new(value.to_s, Xirr::PRECISION)]
       end
     end
 
