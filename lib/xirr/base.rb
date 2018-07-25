@@ -11,20 +11,13 @@ module Xirr
       @cf = cf
     end
 
-    # Calculates days until last transaction
-    # @return [Rational]
-    # @param date [Date]
-    def periods_from_start(date)
-      (date - cf.min_date) / cf.period
-    end
-
     # Net Present Value function that will be used to reduce the cashflow
     # @param rate [BigDecimal]
     # @return [BigDecimal]
     def xnpv(rate)
       cf.inject(0) do |sum, t|
-        period = (t.date - cf.min_date) / cf.period
-        sum   += t.amount / ((1 + rate)**period)
+        periods_from_start = (t.date - cf.min_date) / cf.period
+        sum += t.amount / ((1 + rate)**periods_from_start)
       end
     end
   end
