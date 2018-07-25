@@ -43,9 +43,9 @@ module Xirr
         return left, left, left, true if npv_positive?(right) # Not Enough Precision in the left to find the IRR
       end
       if _left == _mid
-        return midpoint, format_irr(midpoint, right), right, false # Result is to the Right
+        return midpoint, ((midpoint+right)/2), right, false # Result is to the Right
       else
-        return left, format_irr(left, midpoint), midpoint, false # Result is to the Left
+        return left, ((left+midpoint)/2), midpoint, false # Result is to the Left
       end
     end
 
@@ -54,13 +54,6 @@ module Xirr
     # Returns true if result is to the right ot the range
     def npv_positive?(midpoint)
       xnpv(midpoint) > 0
-    end
-
-    # @param left [Float]
-    # @param right [Float]
-    # @return [Float] IRR of the Cashflow
-    def format_irr(left, right)
-      irr = (right+left) / 2
     end
 
     def get_answer(midpoint, options, runs)
@@ -78,7 +71,7 @@ module Xirr
     def loop_rates(left, midpoint, right, iteration_limit)
       runs = 0
       while (right - left).abs > Xirr::EPS && runs < iteration_limit do
-        runs                               += 1
+        runs += 1
         left, midpoint, right, should_stop = bisection(left, midpoint, right)
         break if should_stop
         if right_limit_reached?(midpoint)
