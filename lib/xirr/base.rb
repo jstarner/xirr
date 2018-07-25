@@ -23,7 +23,8 @@ module Xirr
     # @return [BigDecimal]
     def xnpv(rate)
       cf.inject(0) do |sum, t|
-        sum += t.amount / ((1 + rate)**periods_from_start(t.date))
+        period = (t.date - cf.min_date) / cf.period
+        sum   += t.amount / ((1 + rate)**period)
       end
     end
   end
