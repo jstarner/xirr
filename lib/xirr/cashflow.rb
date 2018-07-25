@@ -63,7 +63,7 @@ module Xirr
       else
         xirr = choose_(method).send :xirr, guess, options
         xirr = choose_(other_calculation_method(method)).send(:xirr, guess, options) if (xirr.nil? || xirr.nan?) && fallback
-        xirr || Xirr::REPLACE_FOR_NIL
+        xirr || nil
       end
     end
 
