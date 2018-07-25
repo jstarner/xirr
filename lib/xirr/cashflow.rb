@@ -41,7 +41,7 @@ module Xirr
     # Last investment date
     # @return [Time]
     def max_date
-      @max_date ||= self.map(&:date).max
+      @max_date ||= self.last.date
     end
 
     # Calculates a simple IRR guess based on period of investment and multiples.
@@ -102,7 +102,7 @@ module Xirr
     # First investment date
     # @return [Time]
     def min_date
-      @min_date ||= self.map(&:date).min
+      @min_date ||= self.first.date
     end
 
     # @return [String]
