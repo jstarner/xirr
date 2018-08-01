@@ -102,7 +102,7 @@ module Xirr
     # First investment date
     # @return [Time]
     def min_date
-      @max_date ||= self.map(&:date).min
+      @min_date ||= self.map(&:date).min
     end
 
     # @return [String]
