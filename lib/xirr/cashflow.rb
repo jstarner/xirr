@@ -8,10 +8,10 @@ module Xirr
     # @param args [Transaction]
     # @example Creating a Cashflow
     #   cf = Cashflow.new
-    #   cf << Transaction.new( 1000, date: '2013-01-01'.to_date)
-    #   cf << Transaction.new(-1234, date: '2013-03-31'.to_date)
+    #   cf << Transaction.new( 1000, '2013-01-01'.to_date)
+    #   cf << Transaction.new(-1234, '2013-03-31'.to_date)
     #   Or
-    #   cf = Cashflow.new Transaction.new( 1000, date: '2013-01-01'.to_date), Transaction.new(-1234, date: '2013-03-31'.to_date)
+    #   cf = Cashflow.new Transaction.new( 1000, '2013-01-01'.to_date), Transaction.new(-1234, '2013-03-31'.to_date)
     def initialize(flow: [], period: Xirr::PERIOD, ** options)
       @period   = period
       @fallback = options[:fallback] || Xirr::FALLBACK
@@ -96,7 +96,7 @@ module Xirr
       # self
       compact = Hash.new 0
       self.each { |flow| compact[flow.date] += flow.amount }
-      Cashflow.new flow: compact.map { |key, value| Transaction.new(value, date: key) }, options: options, period: period
+      Cashflow.new flow: compact.map { |key, value| Transaction.new(value, key) }, options: options, period: period
     end
 
     # First investment date
