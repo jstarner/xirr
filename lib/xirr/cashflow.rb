@@ -35,13 +35,13 @@ module Xirr
     # @return [Float]
     # Sums all amounts in a cashflow
     def sum
-      self.map(&:amount).sum
+      self.sum{|tr| tr[:amount]}
     end
 
     # Last investment date
     # @return [Time]
     def max_date
-      @max_date ||= self.map(&:date).max
+      @max_date ||= self.map{|tr| tr[:date]}.max
     end
 
     # Calculates a simple IRR guess based on period of investment and multiples.
@@ -93,16 +93,13 @@ module Xirr
     end
 
     def compact_cf
-      # self
-      compact = Hash.new 0
-      self.each { |flow| compact[flow.date] += flow.amount }
-      Cashflow.new flow: compact.map { |key, value| Transaction.new(value, key) }, options: options, period: period
+      Cashflow.new flow: self, options: options, period: period
     end
 
     # First investment date
     # @return [Time]
     def min_date
-      @min_date ||= self.map(&:date).min
+      @min_date ||= self.map{|tr| tr[:date]}.min
     end
 
     # @return [String]
@@ -118,7 +115,7 @@ module Xirr
 
     def << arg
       super arg
-      self.sort! { |x, y| x.date <=> y.date }
+      self.sort! { |x, y| x[:date] <=> y[:date] }
       self
     end
 
@@ -145,7 +142,7 @@ module Xirr
     # @return [Integer]
     def first_transaction_direction
       # self.sort! { |x, y| x.date <=> y.date }
-      @first_transaction_direction ||= self.first.amount / self.first.amount.abs
+      @first_transaction_direction ||= self.first[:amount] / self.first[:amount].abs
     end
 
     # Based on the direction of the first investment finds the multiple cash-on-cash
@@ -154,7 +151,7 @@ module Xirr
     # @api private
     # @return [Float]
     def multiple
-      inflow.sum(&:amount).abs / outflows.sum(&:amount).abs
+      inflow.sum{|tr| tr[:amount]}.abs / outflows.sum{|tr| tr[:amount]}.abs
     end
 
     def first_transaction_positive?
@@ -173,7 +170,7 @@ module Xirr
     # @see #outflows
     # Selects all positives transactions from Cashflow
     def inflow
-      self.select { |x| x.amount * first_transaction_direction < 0 }
+      self.select { |x| x[:amount] * first_transaction_direction < 0 }
     end
 
     # @api private
@@ -181,7 +178,7 @@ module Xirr
     # @see #inflow
     # Selects all negatives transactions from Cashflow
     def outflows
-      self.select { |x| x.amount * first_transaction_direction > 0 }
+      self.select { |x| x[:amount] * first_transaction_direction > 0 }
     end
 
   end
