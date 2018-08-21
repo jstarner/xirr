@@ -31,6 +31,10 @@ module Xirr
     def valid?
       !invalid?
     end
+    
+    def positive_return?
+      sum > 0.0
+    end
 
     # @return [Float]
     # Sums all amounts in a cashflow
