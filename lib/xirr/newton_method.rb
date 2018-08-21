@@ -46,6 +46,7 @@ module Xirr
     def xirr guess, options
       func = Function.new(self, :xnpv)
       rate = [guess || cf.irr_guess]
+      puts rate
       begin
         nlsolve(func, rate)
         puts rate
